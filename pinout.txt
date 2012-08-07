@@ -1,0 +1,13 @@
+P1.6 - engine out 1
+P1.5 - engine out 2
+P1.7 - engine out 3
+P1.4 - engine out 4
+
+P3.2 - left (negated)
+P3.3 - left (negated)
+
+P3.4 - turbo mode
+
+P3.5 - engine type select (unipolar/bipolar)
+
+P3.7 - LED

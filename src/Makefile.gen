@@ -1,0 +1,61 @@
+PROGRAM:=main
+OUT:=$(PROGRAM).ihex
+SRC:=$(wildcard *.c)
+MCU_TYPE:=mcs51
+
+
+OBJ:=$(SRC:.c=.rel)
+HEX_FILE:=$(PROGRAM).hex
+BIN_FILE:=$(PROGRAM).bin
+
+CC:=sdcc
+MKBIN:=makebin
+
+CFLAGS_COMMON:=-m$(MCU_TYPE) --std-c99 --model-small
+CFLAGS+=$(CFLAGS_COMMON)
+
+
+.PHONY: all
+all: release
+
+.PHONY: debug
+debug: CFLAGS+=--debug
+debug: hex bin full.bin
+
+.PHONY: release
+release: CFLAGS+=--opt-code-size -DNDEBUG
+release: hex bin full.bin
+
+.PHONY: hex
+hex: $(OUT)
+
+.PHONY: bin
+bin: $(BIN_FILE)
+
+#$(HEX_FILE): $(OUT)
+#	$(OBJ_CP) -O ihex $< $@
+
+$(BIN_FILE): $(OUT)
+	@echo MKBIN $(BIN_FILE)
+	$(MKBIN) -p < "$<" > "$@"
+
+$(OUT): $(OBJ) Makefile
+	@echo LD $(OUT)
+	$(CC) $(CFLAGS) $(OBJ) -o $(OUT)
+
+-include *.d
+
+%.rel: %.c Makefile
+	@echo CC $*.c
+	$(CC) $(CFLAGS) -c "$*.c"
+	$(CC) -MM "$*.c" > "$*.d"
+
+full.bin: $(BIN_FILE)
+	@echo MK-BIG-IMG
+	cp "$(BIN_FILE)" "$@"
+	head -c "$$(expr 2048 - `cat "$@" | wc -c`)" /dev/zero >> "$@"
+
+.PHONY: flash_mcu
+flash_mcu: full.bin
+	@echo FLASH uC
+	ezdlin /dev/ttyUSB0 -W full.bin

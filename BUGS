@@ -1,0 +1,1 @@
+* device has no external memory thus is does not remember on which step motor has been stopped after turning it off and on again.

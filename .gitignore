@@ -1,0 +1,7 @@
+bzr_team.conf
+gen
+*.out-*opt
+*.?#?
+*.bin
+*.hex
+*.out

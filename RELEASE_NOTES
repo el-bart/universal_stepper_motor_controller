@@ -1,0 +1,11 @@
+-- v1.0.2 --
+* added link to project's repo.
+
+-- v1.0.1 --
+* added licensing information.
+
+-- v1.0.0 --
+* support for unipolar stepper motor engines.
+* support for bipolar stepper motor engines.
+* idle mode when nothing is happening (power save).
+* normal (step-by-step) and turbo (continuous) opperation modes.
